@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import Todo from "../models/todos.js"
 
-export const readTodos = async (req, res) => {
+export const readTodos = async(req, res) => {
   try {
     const todos = await Todo.find();
     res.status(200).json(todos);
@@ -10,17 +10,18 @@ export const readTodos = async (req, res) => {
   }
 };
 
-export const createTodo = async (req, res) => {
+export const createTodo = async(req, res) => {
   const todo = new Todo(req.body);
   try {
     await todo.save();
     res.status(201).json(todo);
   } catch (error) {
+    console.log(req.body)
     res.status(409).json({ error: error.message });
   }
 };
 
-export const updateTodo = async (req, res) => {
+export const updateTodo = async(req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -31,7 +32,7 @@ export const updateTodo = async (req, res) => {
   res.json(todo);
 }
 
-export const deleteTodo = async (req, res) => {
+export const deleteTodo = async(req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -39,5 +40,5 @@ export const deleteTodo = async (req, res) => {
   }
   await Todo.findByIdAndRemove(id);
 
-  res.json({ message: 'Todo deleted successfully' });
+  res.json({ message: 'Todo deleted successfully' + id });
 }
